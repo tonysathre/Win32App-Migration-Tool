@@ -8,7 +8,7 @@ Filename:     Get-ContentInfo.ps1
 Function to get content from the content source folder for the deployment type and copy it to the content destination folder
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the
 
 .PARAMETER InstallContent
@@ -60,7 +60,7 @@ function Get-ContentInfo {
 
         # Characters that are not allowed in Windows folder names
         $invalidChars = '[<>:"/\\|\?\*]'
-        
+
         # Sanitize the folder names
         $ApplicationNameSanitized = ($ApplicationName -replace $invalidChars, '_').TrimEnd('.', ' ')
         $DeploymentTypeNameSanitized = ($DeploymentTypeName -replace $invalidChars, '_').TrimEnd('.', ' ')
@@ -68,7 +68,7 @@ function Get-ContentInfo {
         # Content folder(s) to copy to
         $destinationInstallFolder = ("{0}\{1}" -f $ApplicationNameSanitized, $DeploymentTypeNameSanitized)
         $destinationUninstallFolder = ("{0}\{1}\Uninstall" -f $ApplicationNameSanitized, $DeploymentTypeNameSanitized)
-        
+
         # Build final folder name strings
         $destinationInstallFolder = Join-Path -Path "$workingFolder_Root\Content" -ChildPath $destinationInstallFolder
         $destinationUninstallFolder = Join-Path -Path "$workingFolder_Root\Content" -ChildPath $destinationUninstallFolder

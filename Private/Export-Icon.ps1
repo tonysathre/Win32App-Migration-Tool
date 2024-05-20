@@ -8,7 +8,7 @@ Filename:     Export-Icon.ps1
 Function to export icon from selected ConfigMgr Application
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the pipeline
 
 .PARAMETER AppName
@@ -35,14 +35,14 @@ function Export-Icon {
     process {
 
         try {
-            
+
             #Check if the file exists
             if (Test-Path -Path $IconPath) {
                 Write-Log -Message ("Application icon for '{0}' already exists at '{1}'" -f $AppName, $IconPath) -LogId $LogId -Severity 2
                 Write-Host ("Application icon for '{0}' already exists at '{1}'" -f $AppName, $IconPath) -ForegroundColor Yellow
             }
             else {
-                
+
                 # Convert the base64 string to a byte array and save it to a file"
                 $icon = [Convert]::FromBase64String($IconData)
                 [System.IO.File]::WriteAllBytes($IconPath, $icon)

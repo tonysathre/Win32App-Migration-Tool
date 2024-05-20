@@ -9,7 +9,7 @@ Filename:     New-IntuneWin.ps1
 Function to create a .intunewin file
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the pipeline
 
 .PARAMETER ContentFolder
@@ -68,7 +68,7 @@ function New-IntuneWin {
             # Handle the default case if none of the conditions match
             Write-Host "No matching extension found."
         }
-    
+
         Write-Log -Message ("Building IntuneWinAppUtil.exe execution string: '{0}' -s '{1}' -c '{2}' -o '{3}'" -f "$workingFolder_Root\ContentPrepTool\IntuneWinAppUtil.exe", $commandToUse, $ContentFolder, $OutputFolder) -LogId $LogId
         Write-Host ("Building IntuneWinAppUtil.exe execution string: '{0}' -s '{1}' -c '{2}' -o '{3}'" -f "$workingFolder_Root\ContentPrepTool\IntuneWinAppUtil.exe", $commandToUse, $ContentFolder, $OutputFolder)  -ForegroundColor Cyan
 
@@ -84,7 +84,7 @@ function New-IntuneWin {
                 '-q'
             )
             Start-Process -FilePath (Join-Path -Path "$workingFolder_Root\ContentPrepTool" -ChildPath "IntuneWinAppUtil.exe") -ArgumentList $arguments -Wait
-        
+
         }
         catch {
             Write-Log -Message ("An error was encountered when attempting to create a intunewin file at '{0}'" -f $OutputFolder) -LogId $LogId -Severity 3
@@ -96,11 +96,11 @@ function New-IntuneWin {
         $fileToCheck = $commandToUse -replace '\.[^.]*$', '.intunewin'
 
         if (Test-Path -Path "$OutputFolder\$fileToCheck" ) {
-            Write-Log -Message ("Successfully created intunewin file '{0}' at '{1}'" -f $fileToCheck, $OutputFolder) -LogId $LogId 
+            Write-Log -Message ("Successfully created intunewin file '{0}' at '{1}'" -f $fileToCheck, $OutputFolder) -LogId $LogId
             Write-Host ("Successfully created intunewin file '{0}' at '{1}'" -f $fileToCheck, $OutputFolder) -ForegroundColor Green
 
             # Override the intunewin filename if requested. We can't rename this during the creation of the file so let's rename it now
-            if ($OverrideIntuneWin32FileName) { 
+            if ($OverrideIntuneWin32FileName) {
 
                 Write-Log -Message ("The 'OverrideIntuneWin32FileName' parameter was passed. Renaming intunewin file '{0}' to '{1}.intunewin'" -f $fileToCheck, $OverrideIntuneWin32FileName) -LogId $LogId
                 Write-Host ("The 'OverrideIntuneWin32FileName' parameter was passed. Renaming intunewin file '{0}' to '{1}.intunewin'" -f $fileToCheck, $OverrideIntuneWin32FileName) -ForegroundColor Cyan
@@ -111,7 +111,7 @@ function New-IntuneWin {
                     if (Test-Path -Path "$OutputFolder\$OverrideIntuneWin32FileName.intunewin") {
                         Write-Log -Message ("The file '{0}' already exists. Deleting the existing file before renaming" -f "$OutputFolder\$OverrideIntuneWin32FileName.intunewin") -LogId $LogId
                         Write-Host ("The file '{0}' already exists. Deleting the existing file before renaming" -f "$OutputFolder\$OverrideIntuneWin32FileName.intunewin") -ForegroundColor Yellow
-                        Remove-Item -Path "$OutputFolder\$OverrideIntuneWin32FileName.intunewin" -Force -ErrorAction Stop 
+                        Remove-Item -Path "$OutputFolder\$OverrideIntuneWin32FileName.intunewin" -Force -ErrorAction Stop
                     }
 
                     Rename-Item -Path "$OutputFolder\$fileToCheck" -NewName "$OverrideIntuneWin32FileName.intunewin" -ErrorAction Stop

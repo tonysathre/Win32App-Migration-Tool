@@ -9,7 +9,7 @@ Filename:     Get-LocalDetectionMethods.ps1
 Function to get the local detection methods from the detection methods xml object
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the
 
 .PARAMETER XMLObject
@@ -73,7 +73,7 @@ function Get-DetectionMethod {
         $xmlDocument.EnhancedDetectionMethod.Rule.Expression.Operands.Expression | ForEach-Object {
             Find-SettingReferences -Node $_ -Rules ([ref]$rules)
         }
-        
+
         # Create an array to store the settings
         $settingsNodes = $xmlDocument.DocumentElement.SelectNodes("//def:Settings/*", $namespaceManager)
         foreach ($node in $settingsNodes) {
@@ -83,7 +83,7 @@ function Get-DetectionMethod {
                 Type        = $node.LocalName
                 LogicalName = $logicalName
             }
-            
+
             # Populate specific properties based on the type of setting
             switch ($node.LocalName) {
                 "SimpleSetting" {
@@ -112,7 +112,7 @@ function Get-DetectionMethod {
                     $setting | Add-Member -NotePropertyName "Rules_ConstantDataType" -NotePropertyValue $rule.ConstantDataType
                 }
             }
-            
+
             # Add the setting to the settings array
             $settings += $setting
         }

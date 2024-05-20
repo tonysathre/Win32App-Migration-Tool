@@ -9,7 +9,7 @@ Filename:     Get-AppInfo.ps1
 Function to get application information from ConfigMgr
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the
 
 .PARAMETER ApplicationName
@@ -35,7 +35,7 @@ function Get-AppInfo {
 
     }
     process {
-    
+
         # Iterate through each application and get the details
         foreach ($application in $applicationName) {
 
@@ -44,13 +44,13 @@ function Get-AppInfo {
 
             Write-Log -Message ("Processing application '{0}' of '{1}': '{2}'" -f $i, $applicationCount, $application.LocalizedDisplayName) -LogId $LogId
             Write-Host ("Processing application '{0}' of '{1}': '{2}'" -f $i, $applicationCount, $application.LocalizedDisplayName) -ForegroundColor Cyan
-        
+
             try {
                 # Grab the SDMPackgeXML which contains the application details
                 Write-Log -Message ("Invoking Get-CMApplication where Id equals '{0}' for application '{1}'" -f $application.Id, $application.LocalizedDisplayName) -LogId $LogId
                 Write-Host ("Invoking Get-CMApplication where Id equals '{0}' for application '{1}'" -f $application.Id, $application.LocalizedDisplayName) -ForegroundColor Cyan
                 $xmlPackage = Get-CMApplication -Id $application.Id | Where-Object { $null -ne $_.SDMPackageXML } | Select-Object -ExpandProperty SDMPackageXML
-        
+
                 # Prepare xml from SDMPackageXML
                 $xmlContent = [xml]($xmlPackage)
 
@@ -84,7 +84,7 @@ function Get-AppInfo {
 
                 # Add IconData to last column for easy reading
                 $applicationObject | Add-Member NoteProperty -Name IconData -Value $xmlContent.AppMgmtDigest.Resources.Icon.Data
-                
+
                 Write-Log -Message ("Id = '{0}', LogicalName = '{1}', Name = '{2}',Description = '{3}', Publisher = '{4}', Version = '{5}', ReleaseDate = '{6}', InfoUrl = '{7}', Tags = '{8}', TotalDeploymentTypes = '{9}', IconId = '{10}', IconPath = '{11}'" -f `
                         $application.Id, `
                         $xmlContent.AppMgmtDigest.Application.LogicalName, `

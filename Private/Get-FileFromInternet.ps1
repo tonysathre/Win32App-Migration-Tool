@@ -9,7 +9,7 @@ Filename:     Get-FileFromInternet.ps1
 Function to download a file from the internet
 
 .PARAMETER LogID
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the pipeline
 
 .PARAMETER URI

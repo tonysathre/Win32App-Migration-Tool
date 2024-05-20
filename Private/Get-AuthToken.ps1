@@ -10,7 +10,7 @@ Filename:     Get-AuthToken.ps1
 Function to get an access token using MSAL.PS
 
 .PARAMETER LogID
-The component (script name) passed as LogID to the '#Write-Log' function. 
+The component (script name) passed as LogID to the '#Write-Log' function.
 This parameter is built from the line number of the call from the function up the pipeline
 
 .PARAMETER ModuleName
@@ -83,7 +83,7 @@ function Get-AuthToken {
             # Install the PackageProvider if it's not already installed
             Write-Log -Message ("PackageProvider not found. Will install PackageProvider '{0}'" -f $PackageProvider) -LogId $LogId
             Write-Host ("Installing PackageProvider '{0}'" -f $PackageProvider) -ForegroundColor Cyan
-    
+
             try {
                 Install-PackageProvider -Name $PackageProvider -ForceBootstrap -Confirm:$false -Verbose
             }
@@ -91,7 +91,7 @@ function Get-AuthToken {
                 Write-Log -Message ("Warning: Could not install the PackageProvider '{0}'" -f $PackageProvider) -LogId $LogId -Severity 3
                 Write-Warning ("Warning: Could not install the PackageProvider '{0}'" -f $PackageProvider)
                 Write-Log -Message ("'{0}'" -f $_.Exception.Message) -LogId $LogId -Severity 3
-                Get-ScriptEnd -ErrorMessage $_.Exception.Message -LogId $LogId 
+                Get-ScriptEnd -ErrorMessage $_.Exception.Message -LogId $LogId
             }
         }
 
@@ -102,7 +102,7 @@ function Get-AuthToken {
                 # Install the module if it's not already installed
                 Write-Log -Message ("Module not found. Will install module '{0}' in the scope of '{1}'" -f $ModuleName, $ModuleScope) -LogId $LogId
                 Write-Host ("Installing module '{0}' in the scope of '{1}'" -f $ModuleName, $ModuleScope) -ForegroundColor Cyan
-    
+
                 try {
                     Install-Module -Name $ModuleName -Scope $ModuleScope -AllowClobber -Force -Confirm:$false
                 }
@@ -129,7 +129,7 @@ function Get-AuthToken {
                         Write-Log -Message ("Warning: Could not import the module '{0}'" -f $ModuleName) -LogId $LogId -Severity 3
                         Write-Warning ("Warning: Could not import the module '{0}'" -f $ModuleName)
                         Write-Log -Message ("'{0}'" -f $_.Exception.Message) -LogId $LogId -Severity 3
-                        Get-ScriptEnd -ErrorMessage $_.Exception.Message -LogId $LogId 
+                        Get-ScriptEnd -ErrorMessage $_.Exception.Message -LogId $LogId
                     }
                 }
                 else {
@@ -225,7 +225,7 @@ function Get-AuthToken {
                     "ExpiresOn"     = $token.ExpiresOn.UTCDateTime
                 }
                 Write-Log -Message 'Successfully created authentication header' -LogId $LogId
-                Write-Host 'Successfully created authentication header' -ForegroundColor Green            
+                Write-Host 'Successfully created authentication header' -ForegroundColor Green
             }
             catch {
                 Write-Warning -Message ("'{0}'" -f $_.Exception.Message)
@@ -233,7 +233,7 @@ function Get-AuthToken {
             }
         }
         else {
-            Get-ScriptEnd -ErrorMessage 'Failed to connect' -LogId $LogId 
+            Get-ScriptEnd -ErrorMessage 'Failed to connect' -LogId $LogId
         }
     }
 }

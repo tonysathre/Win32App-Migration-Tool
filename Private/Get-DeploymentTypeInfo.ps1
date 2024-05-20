@@ -9,7 +9,7 @@ Filename:     Get-DeploymentTypeInfo.ps1
 Function to get deployment type information from ConfigMgr
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the
 
 .PARAMETER ApplicationId
@@ -31,8 +31,8 @@ function Get-DeploymentTypeInfo {
         $invalidChars = '[<>:"/\\|\?\*]'
 
         # Get UTF-8 encoding without BOM
-        $utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $false 
-        
+        $utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $false
+
     }
     process {
 
@@ -42,7 +42,7 @@ function Get-DeploymentTypeInfo {
             Write-Log -Message ("Invoking Get-CMApplication where Id equals '{0}'" -f $ApplicationId) -LogId $LogId
             Write-Host ("Invoking Get-CMApplication where Id equals '{0}'" -f $ApplicationId) -ForegroundColor Cyan
             $xmlPackage = Get-CMApplication -Id $ApplicationId | Where-Object { $null -ne $_.SDMPackageXML } | Select-Object -ExpandProperty SDMPackageXML
-        
+
             # Prepare xml from SDMPackageXML
             $xmlContent = [xml]($xmlPackage)
 
@@ -81,10 +81,10 @@ function Get-DeploymentTypeInfo {
 
                     # Remove existing files from the Detection Methods folder to avoid ambiguity on import
                     $existingFiles = [System.IO.Directory]::GetFiles($detectionMethodsFolder)
-                    
+
                     foreach ($file in $existingFiles) {
                         Write-Log -Message ("Removing existing file '{0}'" -f $file) -LogId $LogId -Severity 2
-                        [System.IO.File]::Delete($file) 
+                        [System.IO.File]::Delete($file)
                     }
 
                     # Create a new custom hashtable to store Deployment type details
@@ -98,10 +98,10 @@ function Get-DeploymentTypeInfo {
                     $deploymentObject | Add-Member NoteProperty -Name Name -Value $object.Title.InnerText
                     $deploymentObject | Add-Member NoteProperty -Name Technology -Value $object.Installer.Technology
                     $deploymentObject | Add-Member NoteProperty -Name ExecutionContext -Value $object.Installer.ExecutionContext
-                    $deploymentObject | Add-Member NoteProperty -Name InstallContent -Value $installLocation.TrimEnd('\') 
+                    $deploymentObject | Add-Member NoteProperty -Name InstallContent -Value $installLocation.TrimEnd('\')
                     $deploymentObject | Add-Member NoteProperty -Name InstallCommandLine -Value $object.Installer.CustomData.InstallCommandLine
                     $deploymentObject | Add-Member NoteProperty -Name UnInstallSetting -Value $object.Installer.CustomData.UnInstallSetting
-                    $deploymentObject | Add-Member NoteProperty -Name UninstallContent -Value $uninstallLocation.TrimEnd('\') 
+                    $deploymentObject | Add-Member NoteProperty -Name UninstallContent -Value $uninstallLocation.TrimEnd('\')
                     $deploymentObject | Add-Member NoteProperty -Name UninstallCommandLine -Value $object.Installer.CustomData.UninstallCommandLine
                     $deploymentObject | Add-Member NoteProperty -Name ExecuteTime -Value $object.Installer.CustomData.ExecuteTime
                     $deploymentObject | Add-Member NoteProperty -Name MaxExecuteTime -Value $object.Installer.CustomData.MaxExecuteTime
@@ -116,12 +116,12 @@ function Get-DeploymentTypeInfo {
                             $detectionTypeScriptRunAs32Bit = $object.Installer.DetectAction.Args.Arg.Where({ $_.Name -eq 'RunAs32Bit' }).InnerText
                             $detectionTypeExecutionContext = $object.Installer.DetectAction.Args.Arg.Where({ $_.Name -eq 'ExecutionContext' }).InnerText
                             $detectionTypeScriptType = $object.Installer.DetectAction.Args.Arg.Where({ $_.Name -eq 'ScriptType' }).InnerText
-        
+
                             # ScriptType
                             # 0 = PowerShell
                             # 1 = VBScript
                             # 2 = JavaScript
-        
+
                             Switch ($detectionTypeScriptType) {
                                 '0' {
                                     $detectionTypeScriptFileExtension = '.ps1'
@@ -133,11 +133,11 @@ function Get-DeploymentTypeInfo {
                                     $detectionTypeScriptFileExtension = '.js'
                                 }
                             }
-        
+
                             # Extract only the encoded base64 script from the script body
                             $pattern = '# ENCODEDSCRIPT # Begin Configuration Manager encoded script block #\s*(.*?)\s*# ENCODEDSCRIPT# End Configuration Manager encoded script block'
                             $matchSigned = [regex]::Match($detectionTypeScriptBody, $pattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
-        
+
                             if ($matchSigned.Success) {
                                 $extractedContent = $matchSigned.Groups[1].Value
 
@@ -157,14 +157,14 @@ function Get-DeploymentTypeInfo {
                                 $finalScriptContent = $lines -join "`n"
                             }
                             else {
-                                
+
                                 # No need to deal with encoding, just pass the script body to the final object for saving
                                 $finalScriptContent = $detectionTypeScriptBody
                             }
-  
+
                             # Write the detection method to a file
                             $detectionMethodFile = Join-Path -Path $detectionMethodsFolder -ChildPath "DetectionScript$detectionTypeScriptFileExtension"
-   
+
                             try {
 
                                 # Specifying Out-File with Encoding UTF8 is not honored so use .NET method instead to write to file
@@ -182,10 +182,10 @@ function Get-DeploymentTypeInfo {
                         'Local' {
                             $detectionTypeExecutionContext = $object.Installer.DetectAction.Args.Arg.Where({ $_.Name -eq 'ExecutionContext' }).InnerText
                             $detectionTypeMethodBody = $object.Installer.DetectAction.Args.Arg.Where({ $_.Name -eq 'MethodBody' }).InnerText
-                            
+
                             # Define the detection method Xml file path
                             $detectionMethodXmlFile = Join-Path -Path $detectionMethodsFolder -ChildPath 'MethodBody.xml'
-                        
+
                             # Write the detection method to an Xml file
 
                             try {
@@ -202,7 +202,7 @@ function Get-DeploymentTypeInfo {
                             # Attempt to extract the local detection methods from the XML. We will ignore any 'or' operators as these are not supported in Intune
                             if (Test-Path -Path $detectionMethodXmlFile) {
                                 $localDetectionMethods = Get-DetectionMethod -LogId $LogId -XMLObject $detectionTypeMethodBody
-                                
+
                                 if ($localDetectionMethods.Count -gt 0) {
 
                                     Write-Log -Message 'Local Detection Methods extracted from XML' -LogId $LogId
@@ -212,7 +212,7 @@ function Get-DeploymentTypeInfo {
                                         Write-Log -Message ("{0}" -f $method) -LogId $LogId
                                         Write-Host ("{0}" -f $method) -ForegroundColor Green
                                     }
-                                    
+
                                     # Export the detection method to a Json file
                                     # Define the detection method Json file path
                                     $detectionMethodJsonFile = Join-Path -Path $detectionMethodsFolder -ChildPath 'DetectionMethod.json'
@@ -242,7 +242,7 @@ function Get-DeploymentTypeInfo {
                             }
                         }
                     }
-                    
+
                     # Add detection method details to the PSCustomObject
                     $deploymentObject | Add-Member NoteProperty -Name DetectionTypeScriptRunAs32Bit -Value $detectionTypeScriptRunAs32Bit
                     $deploymentObject | Add-Member NoteProperty -Name DetectionTypeScriptType -Value $detectionTypeScriptType
@@ -280,14 +280,14 @@ function Get-DeploymentTypeInfo {
                     Write-Host "$deploymentObject`n" -ForegroundColor Green
 
                     # Add the deployment type object to the array
-                    $deploymentTypes += $deploymentObject          
+                    $deploymentTypes += $deploymentObject
                 }
             }
             else {
                 Write-Log -Message ("Warning: No DeploymentTypes found for '{0}'" -f $xmlContent.AppMgmtDigest.Application.LogicalName) -LogId $LogId -Severity 2
                 Write-Host ("Warning: No DeploymentTypes found for '{0}'" -f $xmlContent.AppMgmtDigest.Application.LogicalName) -ForegroundColor Yellow
             }
-        
+
             return $deploymentTypes
 
         }

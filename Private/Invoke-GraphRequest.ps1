@@ -9,7 +9,7 @@ Filename:     Invoke-GraphRequest.ps1
 Function to invoke a request to the Microsoft Graph API
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the
 
 .PARAMETER GraphUrl
@@ -48,7 +48,7 @@ function Invoke-GraphRequest {
         [Parameter(Mandatory = $false, ValueFromPipeline = $false, HelpMessage = 'The content type for the PATCH or POST request')]
         [string]$ContentType = "application/json; charset=utf-8"
     )
-    
+
     process {
 
         try {
@@ -56,7 +56,7 @@ function Invoke-GraphRequest {
             $graphUri = "$($GraphUrl)/$($Endpoint)/$($Resource)"
             Write-Log -Message ("Building Uri for Graph request. Method: '{0}', Uri: '{1}'" -f $Method, $GraphUri) -LogId $LogId
             Write-Host ("Building Uri for Graph request. Method: '{0}', Uri: '{1}'" -f $Method, $GraphUri) -ForegroundColor Green
-    
+
             # Call Graph API and get JSON response
             switch ($Method) {
                 "GET" {
@@ -78,38 +78,38 @@ function Invoke-GraphRequest {
 
             # Capture current error
             $ExceptionItem = $_
-        
+
             # Construct response error custom object for cross platform support
             $ResponseBody = [PSCustomObject]@{
                 "ErrorMessage" = [string]::Empty
                 "ErrorCode"    = [string]::Empty
             }
-        
+
             # Read response error details differently depending PSVersion
             if ($PSVersionTable.PSVersion.Major -eq 5) {
-                
+
                 # Read the response stream
                 $StreamReader = New-Object -TypeName "System.IO.StreamReader" -ArgumentList @($ExceptionItem.Exception.Response.GetResponseStream())
                 $StreamReader.BaseStream.Position = 0
                 $StreamReader.DiscardBufferedData()
                 $ResponseReader = ($StreamReader.ReadToEnd() | ConvertFrom-Json)
-        
+
                 # Set response error details
                 $ResponseBody.ErrorMessage = $ResponseReader.error.message
                 $ResponseBody.ErrorCode = $ResponseReader.error.code
             }
             else {
                 $ErrorDetails = $ExceptionItem.ErrorDetails.Message | ConvertFrom-Json
-        
+
                 # Set response error details
                 $ResponseBody.ErrorMessage = $ErrorDetails.error.message
                 $ResponseBody.ErrorCode = $ErrorDetails.error.code
             }
         }
-        
+
         # Convert status code to integer for output
         $HttpStatusCodeInteger = ([int][System.Net.HttpStatusCode]$ExceptionItem.Exception.Response.StatusCode)
-        
+
         if ($Method -eq 'GET') {
 
             # Output warning message that the request failed with error message description from response stream
@@ -121,7 +121,7 @@ function Invoke-GraphRequest {
             # Construct new custom error record
             $SystemException = New-Object -TypeName "System.Management.Automation.RuntimeException" -ArgumentList ("{0}: {1}" -f $ResponseBody.ErrorCode, $ResponseBody.ErrorMessage)
             $ErrorRecord = New-Object -TypeName "System.Management.Automation.ErrorRecord" -ArgumentList @($SystemException, $ErrorID, [System.Management.Automation.ErrorCategory]::NotImplemented, [string]::Empty)
-        
+
             # Throw a terminating custom error record
             $PSCmdlet.ThrowTerminatingError($ErrorRecord)
         }

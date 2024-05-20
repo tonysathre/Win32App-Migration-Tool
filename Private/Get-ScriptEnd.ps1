@@ -9,7 +9,7 @@ Filename:     Get-ScriptEnd.ps1
 Function to exit script
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the
 
 .PARAMETER ErrorMessage
@@ -28,7 +28,7 @@ function Get-ScriptEnd {
             Write-Log -Message ("'{0}'" -f $ErrorMessage) -LogId $LogId -Severity 3
             Write-Warning -Message ("'{0}'" -f $ErrorMessage)
         }
-    } 
+    }
     end {
         Set-Location -Path $PSScriptRoot
         Write-Host ''

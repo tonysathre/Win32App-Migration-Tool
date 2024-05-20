@@ -9,7 +9,7 @@ Filename:     Get-InstallCommand.ps1
 Function to build command line for use with the content prep tool
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the pipeline
 
 .PARAMETER InstallTech
@@ -33,7 +33,7 @@ function Get-InstallCommand {
         Write-Log -Message "Function: Get-InstallCommand was called" -Log "Main.log"
 
         # Search the Install Command line for the installer type
-        Write-Log -Message ("'{0}' installer type was detected" -f $InstallTech) -LogId $LogId 
+        Write-Log -Message ("'{0}' installer type was detected" -f $InstallTech) -LogId $LogId
         Write-Host ("'{0}' installer type was detected" -f $InstallTech) -ForegroundColor Green
 
         # Build the command to be used with the Win32 Content Prep Tool

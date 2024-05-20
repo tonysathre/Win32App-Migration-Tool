@@ -8,7 +8,7 @@ Filename:     Get-ContentFiles.ps1
 Function to get content from the content source folder for the deployment type and copy it to the content destination folder
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the
 
 .PARAMETER Source
@@ -31,7 +31,7 @@ function Get-ContentFiles {
         [Parameter(Mandatory = $false, ValueFromPipeline = $false, Position = 2, HelpMessage = 'Add verbose message if specfic flag is set')]
         [string]$Flags
     )
-    
+
     process {
 
         # Extra message to indicate flag condition
@@ -39,7 +39,7 @@ function Get-ContentFiles {
             Write-Log -Message ("Uninstall content is different for '{0}'. Will copy content to \Uninstall folder" -f $deploymentType.Name) -LogId $LogId
             Write-Host ("`nUninstall content is different for '{0}'. Will copy content to \Uninstall folder" -f $deploymentType.Name) -ForegroundColor Yellow
         }
-                
+
         # Create destination folders if they don't exist
         Write-Log -Message ("Attempting to create the destination folder '{0}'" -f $Destination) -LogId $LogId
         Write-Host ("{0}Attempting to create the destination folder '{1}'" -f $(if ($flags -ne 'UninstallDifferent') { "`n" }), $Destination) -ForegroundColor Cyan
@@ -69,7 +69,7 @@ function Get-ContentFiles {
 
         try {
             # List files to copy
-            $filesToCopy = Get-ChildItem -Path $sourceUNC -Recurse -ErrorAction Stop 
+            $filesToCopy = Get-ChildItem -Path $sourceUNC -Recurse -ErrorAction Stop
             $filesToCopy | Select-Object -ExpandProperty FullName | foreach-object { Write-Log -Message ("'{0}'" -f $_) -LogId $LogId }
             Write-Log -Message ("There are '{0}' items to copy" -f $filesToCopy.Count) -LogId $LogId
             Write-Host ("There are '{0}' items to copy" -f $filesToCopy.Count) -ForegroundColor Cyan
@@ -108,7 +108,7 @@ function Get-ContentFiles {
 
             # Remove the progress bar once the copying is complete
             Write-Progress -Completed -Activity 'File copy completed'
-            
+
             try {
                 # Compare the source and destination folders to ensure the copy was successful
                 $sourceCompare = Get-ChildItem -Path $sourceUNC -Recurse -ErrorAction Stop
@@ -125,7 +125,7 @@ function Get-ContentFiles {
 
                         # Files are different but this is OK if the uninstall content has been copied. Check if we have all the source files in the destination folder
                         foreach ($difference in $differences) {
-                            if ($difference.SideIndicator -eq '<=') { 
+                            if ($difference.SideIndicator -eq '<=') {
                                 Write-Log -Message ("'{0}' found in the source folder, but not in the destination folder" -f $difference.InputObject) -LogId $LogId -Severity 3
                                 Write-Warning -Message ("'{0}' found in the source folder, but not in the destination folder" -f $difference.InputObject)
                             }
@@ -141,7 +141,7 @@ function Get-ContentFiles {
                     Write-Log -Message 'Could not compare the source and destination folders' -LogId $LogId -Severity 3
                     Write-Warning -Message 'Could not compare the source and destination folders'
                     Write-Log -Message ("'{0}'" -f $_.Exception.Message) -LogId $LogId -Severity 3
-                    Get-ScriptEnd -LogId $LogId -Message $_.Exception.Message    
+                    Get-ScriptEnd -LogId $LogId -Message $_.Exception.Message
                 }
             }
             catch {

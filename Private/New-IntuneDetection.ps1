@@ -9,7 +9,7 @@ Filename:     New-IntuneDetection.ps1
 Function to get the local detection methods from the detection methods xml object
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the
 
 .PARAMETER LocalSettings
@@ -37,15 +37,15 @@ function New-IntuneDetectionMethod {
                 [Parameter(Mandatory = $true)]
                 [string]$Json
             )
-            
+
             # Convert the JSON to objects
             $objects = $Json | ConvertFrom-Json
-            
+
             function Update-Object {
                 param (
                     $Object
                 )
-                
+
                 # Check key values for empty strings and convert to $null
                 foreach ($property in $Object.PSObject.Properties) {
                     if ($property.Value -is [string] -and $property.Value -eq '') {
@@ -56,17 +56,17 @@ function New-IntuneDetectionMethod {
                     }
                 }
             }
-            
+
             # Process each object
             foreach ($obj in $objects) {
                 Update-Object -Object $obj
             }
-            
+
             # Return the new JSON
             $newJson = $objects | ConvertTo-Json -Depth 5
             return $newJson
         }
-        
+
         # Registry detection method
         function Add-SimpleSetting {
             param(
@@ -78,7 +78,7 @@ function New-IntuneDetectionMethod {
                 [string]$detectionType,
                 [string]$detectionValue
             )
-            
+
             # Prepare 64bit check
             if ($is64Bit -eq 'true') {
                 $check32BitOn64System = [bool]$false
@@ -141,7 +141,7 @@ function New-IntuneDetectionMethod {
             }
             return $object
         }
-        
+
         # File or Folder detection method
         function Add-File {
             param(
@@ -223,7 +223,7 @@ function New-IntuneDetectionMethod {
             }
             return $object
         }
-        
+
         # MSI detection method
         function Add-MSI {
             param(
@@ -274,7 +274,7 @@ function New-IntuneDetectionMethod {
         if ($PSCmdlet.ParameterSetName -eq 'Methods') {
 
             # Check if more than one parameter was passed within the parameter set
-        
+
             if ($PSBoundParameters.Keys.Count -gt 1) {
                 Write-Log -Message 'Only one parameter is allowed in parameter set "Methods". Choose either "LocalSettings" or "Script"' -LogId $LogId -Severity 3
                 Write-Host 'Only one parameter is allowed in parameter set "Methods". Choose either "LocalSettings" or "Script"' -ForegroundColor Red
@@ -336,10 +336,10 @@ function New-IntuneDetectionMethod {
                         }
                     }
                 }
-                
+
                 # Convert the array to JSON
                 $json = $jsonArray | ConvertTo-Json -Depth 5
-            
+
                 # Display or output the JSON
                 Convert-EmptyStringToNullInJson -Json $json
             }

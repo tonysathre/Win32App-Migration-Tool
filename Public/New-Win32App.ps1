@@ -8,7 +8,7 @@ Filename:     New-Win32App.ps1
 The Win32 App Migration Tool is designed to inventory ConfigMgr Applications and Deployment Types, build .intunewin files and create Win3Apps in The Intune Admin Center.
 
 .Description
-**Version 2.0.12 BETA**  
+**Version 2.0.12 BETA**
 
 .PARAMETER LogId
 The component (script name) passed as LogID to the 'Write-Log' function.
@@ -29,7 +29,7 @@ Specify the Site Server to connect to
 When passed, the Application icon is decoded from base64 and saved to the Logos folder
 
 .PARAMETER WorkingFolder
-This is the working folder for the Win32AppMigration Tool. 
+This is the working folder for the Win32AppMigration Tool.
 Note: Care should be given when specifying the working folder because downloaded content can increase the working folder size considerably
 
 .PARAMETER PackageApps
@@ -90,7 +90,7 @@ function New-Win32App {
         [ValidatePattern('(?##The Site Code must be only 3 alphanumeric characters##)^[a-zA-Z0-9]{3}$')]
         [string]$SiteCode,
         [Parameter(Mandatory = $true, ValueFromPipeline = $false, Position = 1, HelpMessage = 'Server name that has an SMS Provider site system role')]
-        [string]$ProviderMachineName,  
+        [string]$ProviderMachineName,
         [Parameter(Mandatory = $true, ValueFromPipeline = $false, Position = 2, HelpMessage = 'The name of the application to search for. Accepts wildcards *')]
         [string]$AppName,
         [Parameter(Mandatory = $false, ValueFromPipeline = $false, HelpMessage = 'DownloadContent: When passed, the content for the deployment type is saved locally to the working folder "Content"')]
@@ -117,7 +117,7 @@ function New-Win32App {
         [string]$OverrideIntuneWin32FileName
     )
 
-    # Create global variable(s) 
+    # Create global variable(s)
     $global:workingFolder_Root = $workingFolder
 
     #region Prepare_Workspace
@@ -172,7 +172,7 @@ function New-Win32App {
             Write-Log -Message ("Get-FileFromInternet -URI '{0} -Destination {1}" -f $Win32ContentPrepToolUri, "$workingFolder_Root\ContentPrepTool") -LogId $LogId
             Get-FileFromInternet -Uri $Win32ContentPrepToolUri -Destination "$workingFolder_Root\ContentPrepTool"
         }
-    } 
+    }
     else {
         Write-Log -Message "The 'PackageApps' parameter was not passed. Skipping downloading of the Win32 Content Prep Tool" -LogId $LogId -Severity 2
         Write-Host "The 'PackageApps' parameter was not passed. Skipping downloading of the Win32 Content Prep Tool" -ForegroundColor Yellow
@@ -186,18 +186,18 @@ function New-Win32App {
     # Build a hash table of switch parameters to pass to the Get-AppList function
     $paramsToPassApp = @{}
     if ($ExcludePMPC) {
-        $paramsToPassApp.Add('ExcludePMPC', $true) 
+        $paramsToPassApp.Add('ExcludePMPC', $true)
         Write-Log -Message "The ExcludePMPC parameter was passed. Ignoring all PMPC created applications" -LogId $LogId -Severity 2
         Write-Host "The ExcludePMPC parameter was passed. Ignoring all PMPC created applications" -ForegroundColor Cyan
     }
     if ($ExcludeFilter) {
-        $paramsToPassApp.Add('ExcludeFilter', $ExcludeFilter) 
+        $paramsToPassApp.Add('ExcludeFilter', $ExcludeFilter)
         Write-Log -Message ("The 'ExcludeFilter' parameter was passed. Ignoring applications that match '{0}'" -f $ExcludeFilter) -LogId $LogId -Severity 2
         Write-Host ("The 'ExcludeFilter' parameter was passed. Ignoring applications that match '{0}'" -f $ExcludeFilter) -ForegroundColor Cyan
     }
     if ($NoOGV) {
-        $paramsToPassApp.Add('NoOGV', $true) 
-        Write-Log -Message "The 'NoOgv' parameter was passed. Suppressing Out-GridView" -LogId $LogId -Severity 2   
+        $paramsToPassApp.Add('NoOGV', $true)
+        Write-Log -Message "The 'NoOgv' parameter was passed. Suppressing Out-GridView" -LogId $LogId -Severity 2
         Write-Host "The 'NoOgv' parameter was passed. Suppressing Out-GridView" -ForegroundColor Cyan
     }
 
@@ -205,12 +205,12 @@ function New-Win32App {
     Write-Host ("Running function 'Get-AppList' -AppName '{0}'" -f $AppName) -ForegroundColor Cyan
 
     $applicationName = Get-AppList -AppName $AppName @paramsToPassApp
- 
+
     # ApplicationName(s) returned from the Get-AppList function
     if ($applicationName) {
         Write-Log -Message "The Win32App Migration Tool will process the following applications:" -LogId $LogId
         Write-Host "The Win32App Migration Tool will process the following applications:" -ForegroundColor Cyan
-        
+
         foreach ($application in $ApplicationName) {
             Write-Log -Message ("Id = '{0}', Name = '{1}'" -f $application.Id, $application.LocalizedDisplayName) -LogId $LogId
             Write-Host ("Id = '{0}', Name = '{1}'" -f $application.Id, $application.LocalizedDisplayName) -ForegroundColor Green
@@ -221,7 +221,7 @@ function New-Win32App {
         Write-Warning -Message ("There were no applications found that match the crieria '{0}' or the Out-GrideView was closed with no selection made. Cannot continue" -f $AppName)
         Get-ScriptEnd
     }
-        
+
     #endRegion
 
     #region Get_App_Details
@@ -240,22 +240,22 @@ function New-Win32App {
     # Calling function to grab deployment types details
     Write-Log -Message "Calling 'Get-DeploymentTypeInfo' function to grab deployment type details" -LogId $LogId
     Write-Host "Calling 'Get-DeploymentTypeInfo' function to grab deployment type details" -ForegroundColor Cyan
-    
+
     $deploymentTypes_Array = foreach ($app in $app_Array) { Get-DeploymentTypeInfo -ApplicationId $app.Id }
     #endregion
 
     #region Get_DeploymentType_Content
     New-VerboseRegion -Message 'Getting deployment type content information' -ForegroundColor 'Gray'
-  
+
     # Calling function to grab deployment type content information
     Write-Log -Message "Calling 'Get-ContentFiles' function to grab deployment type content" -LogId $LogId
     Write-Host "Calling 'Get-ContentFiles' function to grab deployment type content" -ForegroundColor Cyan
-            
-    $content_Array = foreach ($deploymentType in $deploymentTypes_Array) { 
-    
+
+    $content_Array = foreach ($deploymentType in $deploymentTypes_Array) {
+
         # Build or reset a hash table of switch parameters to pass to the Get-ContentFiles function
         $paramsToPassContent = @{}
-    
+
         if ($deploymentType.InstallContent) { $paramsToPassContent.Add('InstallContent', $deploymentType.InstallContent) }
         $paramsToPassContent.Add('UninstallSetting', $deploymentType.UninstallSetting)
         if ($deploymentType.UninstallContent) { $paramsToPassContent.Add('UninstallContent', $deploymentType.UninstallContent) }
@@ -282,14 +282,14 @@ function New-Win32App {
             if ($content.Uninstall_Setting -eq 'Different') {
                 Get-ContentFiles -Source $content.Uninstall_Source -Destination $content.Uninstall_Destination -Flags 'UninstallDifferent'
             }
-        }  
+        }
     }
     else {
         Write-Log -Message "The 'DownloadContent' parameter was not passed. Skipping content download" -LogId $LogId -Severity 2
         Write-Host "The 'DownloadContent' parameter was not passed. Skipping content download" -ForegroundColor Yellow
     }
     #endregion
-    
+
     #region Exporting_Csv data
     # Export $DeploymentTypes to CSV for reference
     New-VerboseRegion -Message 'Exporting collected data to Csv' -ForegroundColor 'Gray'
@@ -326,7 +326,7 @@ function New-Win32App {
             else {
                 Write-Log -Message ("Exporting icon for '{0}' to '{1}'" -f $applicationIcon.Name, $applicationIcon.IconPath) -Logid $LogId
                 Write-Host ("Exporting icon for '{0}' to '{1}'" -f $applicationIcon.Name, $applicationIcon.IconPath) -ForegroundColor Cyan
-                
+
                 # Export the icon to disk
                 Export-Icon -AppName $applicationIcon.Name -IconPath $applicationIcon.IconPath -IconData $applicationIcon.IconData
             }
@@ -352,11 +352,11 @@ function New-Win32App {
 
             # Create the Win32app folder for the .intunewin files
             New-FolderToCreate -Root "$workingFolder_Root\Win32Apps" -FolderNames $content.Win32app_Destination
-        
+
             # Create intunewin files
             Write-Log -Message ("Creating intunewin file for the deployment type '{0}' for app '{1}'" -f $content.DeploymentType_Name, $content.Application_Name) -LogId $LogId
             Write-Host ("Creating intunewin file for the deployment type '{0}' for app '{1}'" -f $content.DeploymentType_Name, $content.Application_Name)  -ForegroundColor Cyan
-            
+
             # Build parameters to splat at the New-IntuneWin function
             $paramsToPassIntuneWin = @{}
 
@@ -371,8 +371,8 @@ function New-Win32App {
             $paramsToPassIntuneWin.Add('OutputFolder', (Join-Path -Path "$workingFolder_Root\Win32Apps" -ChildPath $content.Win32app_Destination))
             $paramsToPassIntuneWin.Add('SetupFile', $content.Install_CommandLine)
 
-            if ($OverrideIntuneWin32FileName) { 
-                $paramsToPassIntuneWin.Add('OverrideIntuneWin32FileName', $OverrideIntuneWin32FileName) 
+            if ($OverrideIntuneWin32FileName) {
+                $paramsToPassIntuneWin.Add('OverrideIntuneWin32FileName', $OverrideIntuneWin32FileName)
             }
 
             # Create the .intunewin file

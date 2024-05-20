@@ -8,7 +8,7 @@ Filename:     New-VerboseRegion.ps1
 Write verbose messages
 
 .PARAMETER LogID
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the pipeline
 
 .PARAMETER Messages

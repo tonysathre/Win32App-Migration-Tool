@@ -1,59 +1,59 @@
 # Win32App Migration Tool
 
- ![alt text](https://byteben.com/bb/Downloads/GitHub/Win32AppMigrationTool_10.jpg)  
+ ![alt text](https://byteben.com/bb/Downloads/GitHub/Win32AppMigrationTool_10.jpg)
 
-## Synopsis  
-  
-The Win32 App Migration Tool is designed to inventory ConfigMgr Applications and Deployment Types, build .intunewin files and create Win3Apps in The Intune Admin Center.  
+## Synopsis
+
+The Win32 App Migration Tool is designed to inventory ConfigMgr Applications and Deployment Types, build .intunewin files and create Win3Apps in The Intune Admin Center.
 Instead of manually checking Application and Deployment Type information and gathering content to build Win32apps, the Win32App Migration Tool is designed to do that for you.
-  
+
 **Blog Post** https://msendpointmgr.com/2021/03/27/automatically-migrate-applications-from-configmgr-to-intune-with-the-win32app-migration-tool/
-  
+
 ## Development Status
 
-  **STATUS: BETA**  
-  The Win32App Migration Tool is still in BETA. I would welcome feedback or suggestions for improvement. Reach out on Twitter to DM @byteben (DM's are open)  
-  After the BETA has been tested succesfully, the next stage of the project will be to build the Win32Apps in Intune automatically.  
-  
-## Requirements  
+  **STATUS: BETA**
+  The Win32App Migration Tool is still in BETA. I would welcome feedback or suggestions for improvement. Reach out on Twitter to DM @byteben (DM's are open)
+  After the BETA has been tested succesfully, the next stage of the project will be to build the Win32Apps in Intune automatically.
+
+## Requirements
 
 - **Configuration Manager Console** The console must be installed on the machine you are running the Win32App Migration Tool from. The following path should resolve true: $ENV:SMS_ADMIN_UI_PATH
-- **Local Administrator** The default Working folder is $ENV:SystemDrive\Win32AppMigrationTool. You will need permissions to create this directory on the System Drive  
-- **Roles** Permission to run the Configuration Manager cmdlet **Get-CMApplication**  
-- **Content Folder Permission** Read permissions to the content source for the Deployment Types that will be exported  
-- **PowerShell 5.1**  
+- **Local Administrator** The default Working folder is $ENV:SystemDrive\Win32AppMigrationTool. You will need permissions to create this directory on the System Drive
+- **Roles** Permission to run the Configuration Manager cmdlet **Get-CMApplication**
+- **Content Folder Permission** Read permissions to the content source for the Deployment Types that will be exported
+- **PowerShell 5.1**
 - **Internet Access** to download the Win32 Content Prep Tool
-  
-## Quick Start  
-  
-  **1. Install-Module Win32AppMigrationTool**  
-  **2. New-Win32App**  -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *"  
+
+## Quick Start
+
+  **1. Install-Module Win32AppMigrationTool**
+  **2. New-Win32App**  -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *"
   **3. Use Information from the CSVs to build a Win32App in Intune**
 
   ```
   New-Win32App [-SiteCode] <String> [[-ProviderMachineName] <String>] [[-AppName] <String[]>]
   ```
 
-The current release of the Win32 App Migration Tool will do the following:-  
-  
+The current release of the Win32 App Migration Tool will do the following:-
+
 - Download the Win32app Content Prep Tool to %WorkingDirectory%\ContentPrepTool
-- Export .intunewin files to %WorkingDirectory%\Win32Apps\<Application GUID>\<Deployment Type GUID>  
-- Export Application Details to %WorkingDirectory%\Details\Applications.csv  
-- Export Deployment Type Details to %WorkingDirectory%\Details\DeploymentTypes.csv  
-- Export Content Details to %WorkingDirectory%\Details\Content.csv (If -DownloadContent parameter passed)  
-- Copy Select Deployment Type Content to %WorkingDirectory%\Content\<Deployment Type GUID>  
-- Export Application icons(s) to %WorkingDirectory%\Icons  
-- Log events to %WorkingDirectory%\Logs\Main.log  
-  
+- Export .intunewin files to %WorkingDirectory%\Win32Apps\<Application GUID>\<Deployment Type GUID>
+- Export Application Details to %WorkingDirectory%\Details\Applications.csv
+- Export Deployment Type Details to %WorkingDirectory%\Details\DeploymentTypes.csv
+- Export Content Details to %WorkingDirectory%\Details\Content.csv (If -DownloadContent parameter passed)
+- Copy Select Deployment Type Content to %WorkingDirectory%\Content\<Deployment Type GUID>
+- Export Application icons(s) to %WorkingDirectory%\Icons
+- Log events to %WorkingDirectory%\Logs\Main.log
+
 ## Important Information
 
 _**// Please use the tool with caution and test in your lab (dont be the guy or gal who tests in production). I accept no responsibility for loss or damage as a result of using these scripts //**_
 
-## Troubleshooting  
-  
-Main.log in the %WorkingFolder%\Logs folder contains a detailed verbose output of the solution  
+## Troubleshooting
 
-## Parameters  
+Main.log in the %WorkingFolder%\Logs folder contains a detailed verbose output of the solution
+
+## Parameters
 
 ### -SiteCode
 
@@ -280,33 +280,33 @@ Default value:
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-  
-## Examples  
-  
+
+## Examples
+
   ```
 New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *"
   ```
   ```
-New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -DownloadContent  
+New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -DownloadContent
   ```
   ```
-New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo  
+New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo
   ```
   ```
-New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo -PackageApps  
+New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo -PackageApps
   ```
   ```
-New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo -PackageApps -CreateApps  
+New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo -PackageApps -CreateApps
   ```
   ```
-New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo -PackageApps -CreateApps -ResetLog  
+New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo -PackageApps -CreateApps -ResetLog
   ```
   ```
-New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo -PackageApps -CreateApps -ResetLog -NoOGV  
+New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo -PackageApps -CreateApps -ResetLog -NoOGV
   ```
   ```
 New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo -PackageApps -CreateApps -ResetLog -ExcludePMPC
   ```
   ```
-New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo -PackageApps -CreateApps -ResetLog -ExcludePMPC -ExcludeFilter "Microsoft*" 
-  ```  
+New-Win32App -SiteCode "BB1" -ProviderMachineName "SCCM1.byteben.com" -AppName "Microsoft Edge Chromium *" -ExportLogo -PackageApps -CreateApps -ResetLog -ExcludePMPC -ExcludeFilter "Microsoft*"
+  ```

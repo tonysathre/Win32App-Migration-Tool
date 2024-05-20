@@ -10,7 +10,7 @@ Function to export data to a csv file.
 If the Csv exists, it will be rolled over to a new file with a timestamp appended to the filename
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the pipeline
 
 .PARAMETER Data
@@ -59,7 +59,7 @@ function Export-CsvDetails {
             try {
                 $newPath = ("{0}_{1}.csv" -f $pathRename, $date)
                 Rename-Item -Path $fullPath -NewName $newPath
-                
+
                 # Create the archive folder if it does not exist
                 if (-not (Test-Path -Path $archivePath)){
                     New-FolderToCreate -Root $Path -FolderNames $archiveFolder
@@ -77,7 +77,7 @@ function Export-CsvDetails {
             }
         }
     }
-    
+
     process {
 
         # Export the data to a csv file

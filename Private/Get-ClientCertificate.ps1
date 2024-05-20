@@ -8,7 +8,7 @@ Filename:     Get-ClientCertificate.ps1
 Function to get a client certificate from the local certificate store
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the
 
 .PARAMETER Thumbprint
@@ -21,10 +21,10 @@ function Get-ClientCertificate {
         [Parameter(Mandatory = $true, ValueFromPipeline = $false, HelpMessage = 'Thumbprint of the client certificate to get')]
         [string]$Thumbprint
     )
-    
+
     process {
 
-        $stores = @('CurrentUser', 'LocalMachine') 
+        $stores = @('CurrentUser', 'LocalMachine')
         foreach ($certStore in $stores) {
             $result = Get-Item -Path "Cert:\$($certStore)\My\$($thumbprint)"
             If (-not $result) {

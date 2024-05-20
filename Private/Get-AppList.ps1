@@ -8,7 +8,7 @@ Filename:     Get-AppList.ps1
 Function to get applications from ConfigMgr and filter the results
 
 .PARAMETER LogId
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the pipeline
 
 .PARAMETER AppName
@@ -80,7 +80,7 @@ function Get-AppList {
             }
 
             if ( (-not ($ExcludePMPC) ) -and $ExcludeFilter -and (-not ($NoOgv) ) ) {
-                Write-Log -Message ("Invoking Get-CMApplication (fast) including apps like '{0}' excluding apps like '{1}'" -f $AppName, $ExcludeFilter) -LogId $LogId 
+                Write-Log -Message ("Invoking Get-CMApplication (fast) including apps like '{0}' excluding apps like '{1}'" -f $AppName, $ExcludeFilter) -LogId $LogId
                 $applicationResult = Get-CMApplication -Fast -Name "*$AppName*" | Where-Object { ( -not ($_.LocalizedDisplayName -like "$ExcludeFilter") ) } | Select-Object @{ Name = 'Id'; Expression = { $_.CI_ID.toString() } }, LocalizedDisplayName, HasContent, NumberOfDeploymentTypes, IsDeployable, IsDeployed, DateCreated, DateLastModified, LastModifiedBy | Sort-Object LocalizedDisplayName | Out-GridView -Passthru -Title 'Select an Application(s) to process the associated deployment types'
 
             }
@@ -94,7 +94,7 @@ function Get-AppList {
             if ( (-not ($ExcludePMPC) ) -and (-not ($ExcludeFilter) ) -and (-not ($NoOGV) ) ) {
                 Write-Log -Message ("Invoking Get-CMApplication (fast) including apps like '{0}'" -f $AppName) -LogId $LogId
                 $applicationResult = Get-CMApplication -Fast -Name "*$AppName*" | Select-Object @{ Name = 'Id'; Expression = { $_.CI_ID.toString() } }, LocalizedDisplayName, HasContent, NumberOfDeploymentTypes, IsDeployable, IsDeployed, DateCreated, DateLastModified, LastModifiedBy | Sort-Object LocalizedDisplayName | Out-GridView -Passthru -Title 'Select an application(s) to process the associated deployment types'
-            } 
+            }
 
             # Check if any applications were selected or found
             if ($applicationResult) {

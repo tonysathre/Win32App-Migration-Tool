@@ -66,10 +66,10 @@ function Write-Log {
 
                     # Create a StreamWriter instance and open the file for writing
                     $streamWriter = New-Object -TypeName System.IO.StreamWriter -ArgumentList $logToWrite
-        
+
                     # Write an empty string to the file without the append parameter
                     $streamWriter.Write("")
-        
+
                     # Close the StreamWriter, which also flushes the content to the file
                     $streamWriter.Close()
                     Write-Host ("Log file '{0}' wiped" -f $logToWrite) -ForegroundColor Yellow
@@ -83,7 +83,7 @@ function Write-Log {
                 throw
             }
         }
-            
+
         try {
 
             # Extract log object and construct format for log line entry

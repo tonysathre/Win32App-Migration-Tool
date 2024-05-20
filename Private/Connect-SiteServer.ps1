@@ -9,7 +9,7 @@ Filename:     Connect-SiteServer.ps1
 Function to connect to a Site Server
 
 .PARAMETER LogID
-The component (script name) passed as LogID to the 'Write-Log' function. 
+The component (script name) passed as LogID to the 'Write-Log' function.
 This parameter is built from the line number of the call from the function up the pipeline
 
 .PARAMETER SiteCode
@@ -35,14 +35,14 @@ function Connect-SiteServer {
     )
 
     begin {
-        Write-Log -Message "Function: Connect-SiteServer was called" 
+        Write-Log -Message "Function: Connect-SiteServer was called"
         Write-Log -Message "Import-Module `$ENV:SMS_ADMIN_UI_PATH\..\ConfigurationManager.psd1"
         Write-Host ("Importing Module: 'ConfigurationManager.psd1' and connecting to Provider '{0}'..." -f $ProviderMachineName) -ForegroundColor Cyan
     }
-    
+
     process {
 
-        # Import the ConfigurationManager.psd1 module 
+        # Import the ConfigurationManager.psd1 module
         try {
             if (-not (Get-Module ConfigurationManager)) {
                 Import-Module "$($ENV:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1" -Verbose:$false
@@ -77,14 +77,14 @@ function Connect-SiteServer {
             }
             else {
                 Write-Log -Message ("Connected to PSDrive '{0}'" -f $SiteCode) -LogId $LogId
-                Write-Host ("Connected to PSDrive '{0}'" -f $SiteCode) -ForegroundColor Green 
+                Write-Host ("Connected to PSDrive '{0}'" -f $SiteCode) -ForegroundColor Green
                 Set-Location "$($SiteCode):\"
             }
         }
         catch {
             Write-Log -Message ("Warning: Could not connect to the specified provider '{0}' at site '{1}'" -f $ProviderMachineName, $SiteCode) -LogId $LogId -Severity 3
             Write-Warning ("Warning: Could not connect to the specified provider '{0}' at site '{1}'" -f $ProviderMachineName, $SiteCode)
-            Get-ScriptEnd -ErrorMessage $_.Exception.Message -LogId $LogId 
+            Get-ScriptEnd -ErrorMessage $_.Exception.Message -LogId $LogId
         }
     }
 }
