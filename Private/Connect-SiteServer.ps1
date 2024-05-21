@@ -61,10 +61,16 @@ function Connect-SiteServer {
 
         # Check the SMS Provider is valid
         if ( -not ( $ProviderMachineName -eq (Get-PSDrive -ErrorAction SilentlyContinue | Where-Object { $_.Provider -like "*CMSite*" }).Root ) ) {
-            Write-Log -Message ("Could not connect to the Provider '{0}'" -f $ProviderMachineName) -Severity 3
-            Write-Warning ("Could not connect to the Provider '{0}' `nDid you specify the correct Site System?" -f $ProviderMachineName)
-            Write-Log -Message ("'{0}'" -f $_.Exception.Message) -LogId $LogId -Severity 3
-            Get-ScriptEnd -LogId $LogId -ErrorMessage $_.Exception.Message
+            try {
+                Write-Host ("PSDrive '{0}' not found with root '{1}', creating it" -f $SiteCode, $ProviderMachineName) -ForegroundColor Green
+                New-PSDrive -Name $SiteCode -PSProvider CMSite -Root $ProviderMachineName -ErrorAction Stop -Credential $Credential -Scope Script | Out-Null
+            }
+            catch {
+                Write-Log -Message ("Could not connect to the Provider '{0}'" -f $ProviderMachineName) -Severity 3
+                Write-Warning ("Could not connect to the Provider '{0}' `nDid you specify the correct Site System?" -f $ProviderMachineName)
+                Write-Log -Message ("'{0}'" -f $_.Exception.Message) -LogId $LogId -Severity 3
+                Get-ScriptEnd -LogId $LogId -ErrorMessage $_.Exception.Message
+            }
         }
         else {
             Write-Log -Message ("Connected to provider {0} at site '{1}'" -f $ProviderMachineName, $SiteCode )
