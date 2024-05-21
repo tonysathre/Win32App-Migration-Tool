@@ -103,7 +103,7 @@ function New-IntuneWin {
             # Override the intunewin filename if requested. We can't rename this during the creation of the file so let's rename it now
             if ($OverrideIntuneWin32FileName) {
                 # Replace invalid characters in the filename
-                $OverrideIntuneWin32FileName = $OverrideIntuneWin32FileName -replace "[$([regex]::Escape($InvalidFileNameChars))]", ''
+                $OverrideIntuneWin32FileName = $OverrideIntuneWin32FileName -replace "[$([regex]::Escape($InvalidFileNameChars))]", '_'
 
                 Write-Log -Message ("The 'OverrideIntuneWin32FileName' parameter was passed. Renaming intunewin file '{0}' to '{1}.intunewin'" -f $fileToCheck, $OverrideIntuneWin32FileName) -LogId $LogId
                 Write-Host ("The 'OverrideIntuneWin32FileName' parameter was passed. Renaming intunewin file '{0}' to '{1}.intunewin'" -f $fileToCheck, $OverrideIntuneWin32FileName) -ForegroundColor Cyan
