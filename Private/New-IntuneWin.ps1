@@ -83,7 +83,7 @@ function New-IntuneWin {
                 "`"$OutputFolder`""
                 '-q'
             )
-            Start-Process -FilePath (Join-Path -Path "$workingFolder_Root\ContentPrepTool" -ChildPath "IntuneWinAppUtil.exe") -ArgumentList $arguments -Wait
+            Start-Process -FilePath (Join-Path -Path "$workingFolder_Root\ContentPrepTool" -ChildPath "IntuneWinAppUtil.exe") -ArgumentList $arguments -Wait -NoNewWindow
 
         }
         catch {
