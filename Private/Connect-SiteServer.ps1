@@ -31,7 +31,11 @@ function Connect-SiteServer {
         [ValidatePattern('(?##The Site Code must be only 3 alphanumeric characters##)^[a-zA-Z0-9]{3}$')]
         [String]$SiteCode,
         [Parameter(Mandatory = $true, ValueFromPipeline = $false, Position = 1, HelpMessage = "Server name that has an SMS Provider site system role")]
-        [String]$ProviderMachineName
+        [String]$ProviderMachineName,
+        [Parameter(Mandatory = $false, ValueFromPipeline = $false, Position = 2, HelpMessage = "The credentials to use when connecting to the Site Server")]
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.CredentialAttribute()]
+        $Credential = [System.Management.Automation.PSCredential]::Empty
     )
 
     begin {
