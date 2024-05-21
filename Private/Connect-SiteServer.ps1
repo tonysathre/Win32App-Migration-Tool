@@ -88,7 +88,7 @@ function Connect-SiteServer {
             else {
                 Write-Log -Message ("Connected to PSDrive '{0}'" -f $SiteCode) -LogId $LogId
                 Write-Host ("Connected to PSDrive '{0}'" -f $SiteCode) -ForegroundColor Green
-                Set-Location "$($SiteCode):\"
+                Push-Location "$($SiteCode):\"
             }
         }
         catch {
