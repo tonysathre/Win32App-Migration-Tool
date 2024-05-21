@@ -42,6 +42,12 @@ function Get-InstallCommand {
         $fileName = $rightMod.TrimStart("\", ".", "`"", "'", " ")
         $command = $fileName + $InstallTech
 
+        if ($InstallTech -eq ".ps1") {
+            $pattern = '[^ ]*\.ps1'
+            $match = [regex]::Match($command, $pattern)
+            $command = $match.Value.TrimStart(".\")
+        }
+
         # Verbose and log the result
         Write-Log -Message "Extracting the SetupFile Name for the Microsoft Win32 Content Prep Tool from the Install Command..." -LogId $LogId
         Write-Host "Extracting the SetupFile Name for the Microsoft Win32 Content Prep Tool from the Install Command..." -ForegroundColor Cyan
