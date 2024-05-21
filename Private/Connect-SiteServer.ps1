@@ -39,6 +39,9 @@ function Connect-SiteServer {
     )
 
     begin {
+        # Store current working directory so we can return to it
+        # This is needed because the script will change the location to the site server's PSDrive
+        $script:CurrentLocation = Get-Location
         Write-Log -Message "Function: Connect-SiteServer was called"
         Write-Log -Message "Import-Module `$ENV:SMS_ADMIN_UI_PATH\..\ConfigurationManager.psd1"
         Write-Host ("Importing Module: 'ConfigurationManager.psd1' and connecting to Provider '{0}'..." -f $ProviderMachineName) -ForegroundColor Cyan
