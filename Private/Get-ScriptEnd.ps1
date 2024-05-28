@@ -33,6 +33,5 @@ function Get-ScriptEnd {
         Set-Location -Path $CurrentLocation
         Write-Host ''
         Write-Log -Message "## The Win32AppMigrationTool Script has Finished ##" -LogId $LogId
-        Write-Host '## The Win32AppMigrationTool Script has Finished ##'
     }
 }
