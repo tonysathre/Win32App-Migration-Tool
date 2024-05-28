@@ -82,19 +82,19 @@ function Get-ContentInfo {
         $contentObject = [PSCustomObject]@{}
 
         # Add content details to the PSCustomObject
-        $contentObject | Add-Member NoteProperty -Name Application_Id -Value $ApplicationId
-        $contentObject | Add-Member NoteProperty -Name Application_Name -Value $ApplicationName
-        $contentObject | Add-Member NoteProperty -Name DeploymentType_LogicalName -Value $DeploymentTypeLogicalName
-        $contentObject | Add-Member NoteProperty -Name DeploymentType_Name -Value $DeploymentTypeName
-        $contentObject | Add-Member NoteProperty -Name Install_Source -Value $InstallContent
-        $contentObject | Add-Member NoteProperty -Name Uninstall_Setting -Value $UninstallSetting
-        $contentObject | Add-Member NoteProperty -Name Uninstall_Source -Value $UninstallContent
-        $contentObject | Add-Member NoteProperty -Name Install_Destination -Value $destinationInstallFolder
-        $contentObject | Add-Member NoteProperty -Name Uninstall_Destination -Value $destinationUninstallFolder
-        $contentObject | Add-Member NoteProperty -Name Install_CommandLine -Value $InstallCommandLine
-        $contentObject | Add-Member NoteProperty -Name Win32app_Destination -Value "$ApplicationNameSanitized\$DeploymentTypeNameSanitized"
+        $contentObject | Add-Member NoteProperty -Name ApplicationId -Value $ApplicationId
+        $contentObject | Add-Member NoteProperty -Name ApplicationName -Value $ApplicationName
+        $contentObject | Add-Member NoteProperty -Name DeploymentTypeLogicalName -Value $DeploymentTypeLogicalName
+        $contentObject | Add-Member NoteProperty -Name DeploymentTypeName -Value $DeploymentTypeName
+        $contentObject | Add-Member NoteProperty -Name InstallSource -Value $InstallContent
+        $contentObject | Add-Member NoteProperty -Name UninstallSetting -Value $UninstallSetting
+        $contentObject | Add-Member NoteProperty -Name UninstallSource -Value $UninstallContent
+        $contentObject | Add-Member NoteProperty -Name InstallDestination -Value $destinationInstallFolder
+        $contentObject | Add-Member NoteProperty -Name UninstallDestination -Value $destinationUninstallFolder
+        $contentObject | Add-Member NoteProperty -Name InstallCommandLine -Value $InstallCommandLine
+        $contentObject | Add-Member NoteProperty -Name Win32appDestination -Value "$ApplicationNameSanitized\$DeploymentTypeNameSanitized"
 
-        Write-Log -Message ("Application_Id = '{0}', Application_Name = '{1}', DeploymentType_LogicalName = '{2}', DeploymentType_Name = '{3}', Install_Source = '{4}', Uninstall_Setting = '{5}', Uninstall_Source = '{6}', Install_Destination = '{7}', Uninstall_Destination = '{8}', Win32app_Destinaton = '{9}'" -f `
+        Write-Log -Message ("ApplicationId = '{0}', ApplicationName = '{1}', DeploymentTypeLogicalName = '{2}', DeploymentTypeName = '{3}', InstallSource = '{4}', UninstallSetting = '{5}', UninstallSource = '{6}', InstallDestination = '{7}', UninstallDestination = '{8}', Win32appDestinaton = '{9}'" -f `
                 $ApplicationId, `
                 $ApplicationName, `
                 $DeploymentTypeLogicalName, `

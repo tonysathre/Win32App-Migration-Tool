@@ -99,13 +99,13 @@ function Get-AppList {
             # Check if any applications were selected or found
             if ($applicationResult) {
                 Write-Log -Message ("'{0}' application{1} selected" -f $applicationResult.Count, $(if ($applicationResult -ne 1) {'s'}) ) -LogId $LogId
-                Write-Host ("'{0}' applications selected" -f $applicationResult.Count) -ForegroundColor Cyan
+                Write-Host ("'{0}' applications selected" -f $applicationResult.Count)
 
                 return $applicationResult
             }
             else {
                 Write-Log -Message ("'{0}' application{1} selected" -f $applicationResult.Count, $(if ($applicationResult -ne 1) {'s'}) ) -LogId $LogId
-                Write-Host ("'{0}' application{1} found" -f $applicationResult.Count, $(if ($applicationResult -ne 1) {'s'}) ) -ForegroundColor Cyan
+                Write-Host ("'{0}' application{1} found" -f $applicationResult.Count, $(if ($applicationResult -ne 1) {'s'}) )
             }
         }
         catch {

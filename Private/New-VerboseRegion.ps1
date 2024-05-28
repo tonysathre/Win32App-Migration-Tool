@@ -2,7 +2,7 @@
 .Synopsis
 Created on:   26/10/2023
 Created by:   Ben Whitmore
-Filename:     New-VerboseRegion.ps1
+Filename:     #New-VerboseRegion.ps1
 
 .Description
 Write verbose messages
